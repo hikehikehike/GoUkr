@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from app.models import City, CityImage
+
+admin.site.register(City)
+admin.site.register(CityImage)
