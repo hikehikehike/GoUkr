@@ -20,12 +20,14 @@ def city_image_file_path(instance, filename):
 
 class City(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     song_line = models.TextField()
     description = models.TextField()
     drive_url = models.URLField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.drive_url = city_drive_url(self.name)
+        self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
     def __str__(self):
