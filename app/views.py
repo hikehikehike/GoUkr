@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from app.models import City
-from app.parse import parse_hotels
+from app.parse import parse_hotels, parse_restaurant
 from app.serializers import CityListSerializer, CitySerializer
 
 
@@ -35,6 +35,6 @@ class CityViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path="restaurants")
     def hotels(self, request, slug=None):
         city = self.get_object()
-        hotels = parse_hotels(city)
+        restaurants = parse_restaurant(city)
 
-        return Response({"hotels": hotels})
+        return Response({"restaurants": restaurants})

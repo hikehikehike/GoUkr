@@ -18,6 +18,12 @@ def generate_booking_link(name):
     return base_url + query + "&" + time_
 
 
+def generate_restaurant_tripadvisor_link(name, city):
+    base_url = "https://www.tripadvisor.com/Search?q="
+    restaurant = name.replace(" ", "+")
+    return base_url + restaurant + "&geo=" + city
+
+
 def parse_hotels(city):
     checkin_date = date.today().strftime("%d.%m.%Y")
     checkout_date = (date.today() + timedelta(days=1)).strftime("%d.%m.%Y")
@@ -31,10 +37,12 @@ def parse_hotels(city):
         name = hotel.select_one(".hotel-name").text
         rating_element = hotel.select_one(".hotel-item-info-rating strong")
         rating = rating_element.text.strip() if rating_element else ""
-        description = hotel.select_one(".hotel-description-trim").text.strip().split(".")[0]
+        description = (
+            hotel.select_one(".hotel-description-trim").text.strip().split(".")[0]
+        )
         price = hotel.select_one(".price_recommendation").text
         image_element = hotel.select_one("img")
-        image = image_element['src'][2:] if image_element else ""
+        image = image_element["src"][2:] if image_element else ""
         location = generate_google_map_link(name)
         view_deal = generate_booking_link(name)
 
@@ -54,8 +62,8 @@ def parse_hotels(city):
 
 def parse_restaurant(city):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-        'Referer': 'https://www.google.com/'
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+        "Referer": "https://www.google.com/",
     }
     url = f"https://restaurantguru.com/{city}"
     page = requests.get(url, headers=headers).content
@@ -64,18 +72,23 @@ def parse_restaurant(city):
     restaurant_list = []
     for restaurant in restaurants:
         name = restaurant.select_one(".title_url").text
-        restaurant_list.append({
-            "name": name,
-            # "image": image,
-            # "price": price,
-            # "location": location,
-            # "cuisines": cuisines,
-            # "status": status,
+        image_element = restaurant.select_one("img")
+        image = image_element["data-src"] if image_element else ""
+        price = len(restaurant.select_one(".cost").find_all("i"))
+        location = generate_restaurant_tripadvisor_link(name, city)
+        cuisines = restaurant.select_one(".cuisine").text
+        if restaurant.select_one(".now_closed_r") is not None:
+            status = restaurant.select_one(".now_closed_r").text
+        else:
+            status = restaurant.select_one(".green").text
 
-        })
-
-    print(restaurant_list)
-
-
-
-parse_restaurant("Lviv")
+        restaurant_list.append(
+            {
+                "name": name,
+                "image": image,
+                "price": price,
+                "location": location,
+                "cuisines": cuisines,
+                "status": status,
+            }
+        )

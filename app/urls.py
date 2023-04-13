@@ -9,10 +9,10 @@ router.register("city", CityViewSet, basename="city")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("cities/<str:slug>/", include(router.urls)),
-    path("cities/<str:slug>/route/", CityViewSet.as_view({"get": "route"}), name="city-route"),
-    path("cities/<str:slug>/hotels/", CityViewSet.as_view({"get": "hotels"}), name="city-hotels"),
-    path("cities/<str:slug>/restaurants/", CityViewSet.as_view({"get": "restaurants"}), name="city-restaurants"),
+    path("city/<str:slug>/", include(router.urls)),
+    path("city/<str:slug>/route/", CityViewSet.as_view({"get": "route"}), name="city-route"),
+    path("city/<str:slug>/hotels/", CityViewSet.as_view({"get": "hotels"}), name="city-hotels"),
+    path("city/<str:slug>/restaurants/", CityViewSet.as_view({"get": "restaurants"}), name="city-restaurants"),
 ]
 
 app_name = "app"
