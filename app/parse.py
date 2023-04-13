@@ -1,5 +1,3 @@
-import time
-
 import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
@@ -52,3 +50,32 @@ def parse_hotels(city):
             }
         )
     return hotel_list
+
+
+# def parse_restaurant(city):
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+#         'Referer': 'https://www.google.com/'
+#     }
+#     url = f"https://restaurantguru.com/{city}"
+#     page = requests.get(url, headers=headers).content
+#     soup = BeautifulSoup(page, "html.parser")
+#     restaurants = soup.select(".restaurant_row")[:15]
+#     restaurant_list = []
+#     for restaurant in restaurants:
+#         name = restaurant.select_one(".title_url").text
+#         restaurant_list.append({
+#             "name": name,
+#             # "image": image,
+#             # "price": price,
+#             # "location": location,
+#             # "cuisines": cuisines,
+#             # "status": status,
+#
+#         })
+#
+#     print(restaurant_list)
+#
+#
+#
+# parse_restaurant("Lviv")
