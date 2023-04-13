@@ -33,7 +33,7 @@ class CityViewSet(viewsets.ModelViewSet):
         return Response({"hotels": hotels})
 
     @action(detail=True, url_path="restaurants")
-    def hotels(self, request, slug=None):
+    def restaurants(self, request, slug=None):
         city = self.get_object()
         restaurants = parse_restaurant(city)
 

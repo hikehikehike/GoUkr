@@ -65,7 +65,7 @@ def parse_restaurant(city):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
         "Referer": "https://www.google.com/",
     }
-    url = f"https://restaurantguru.com/{city}"
+    url = f"https://restaurantguru.com/{city.name}"
     page = requests.get(url, headers=headers).content
     soup = BeautifulSoup(page, "html.parser")
     restaurants = soup.select(".restaurant_row")[:15]
@@ -75,7 +75,7 @@ def parse_restaurant(city):
         image_element = restaurant.select_one("img")
         image = image_element["data-src"] if image_element else ""
         price = len(restaurant.select_one(".cost").find_all("i"))
-        location = generate_restaurant_tripadvisor_link(name, city)
+        location = generate_restaurant_tripadvisor_link(name, city.name)
         cuisines = restaurant.select_one(".cuisine").text
         if restaurant.select_one(".now_closed_r") is not None:
             status = restaurant.select_one(".now_closed_r").text
@@ -92,3 +92,5 @@ def parse_restaurant(city):
                 "status": status,
             }
         )
+
+    return restaurant_list
