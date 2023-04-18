@@ -1,9 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from app.models import City
 from app.parse import parse_hotels, parse_restaurant
-from app.serializers import CityListSerializer, CitySerializer
+from app.serializers import CityListSerializer, CitySerializer, CommentSerializer
 
 
 class CityViewSet(viewsets.ModelViewSet):
@@ -38,3 +39,12 @@ class CityViewSet(viewsets.ModelViewSet):
         restaurants = parse_restaurant(city)
 
         return Response({"restaurants": restaurants})
+
+
+class CommentCreateView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        city_slug = self.kwargs.get("city_slug")
+        city = get_object_or_404(City, slug=city_slug)
+        serializer.save(user=self.request.user, city=city)
