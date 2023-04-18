@@ -40,3 +40,23 @@ class CityImage(models.Model):
 
     def __str__(self):
         return f"Image: {self.city}"
+
+
+class Comment(models.Model):
+    RATING = (
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (5, "5"),
+    )
+    user = models.ForeignKey(
+        "user.User", on_delete=models.CASCADE, related_name="comment"
+    )
+    city = models.ForeignKey("City", on_delete=models.CASCADE, related_name="comment")
+    header = models.CharField(max_length=255)
+    text = models.TextField()
+    rating = models.IntegerField(default=5, choices=RATING)
+
+    def __str__(self):
+        return f"Comment {self.user.first_name} for {self.city}. Rating {self.rating}"
