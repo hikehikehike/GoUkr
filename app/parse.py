@@ -27,24 +27,17 @@ def generate_restaurant_tripadvisor_link(name, city):
 
 
 def parse_hotels(city):
-    chrome_options = Options()
-    chrome_options.add_argument("--proxy-server=http://91.241.217.58:9090")
-    driver = webdriver.Chrome(options=chrome_options)
 
-    url = f"https://restaurantguru.com/{city.name}"
-    driver.get(url)
-    page_source = driver.page_source
+    proxies = {
+        "http": "http://91.241.217.58:9090",
+    }
 
-    # proxies = {
-    #     "http": "http://91.241.217.58:9090",
-    # }
-    #
-    # checkin_date = date.today().strftime("%d.%m.%Y")
-    # checkout_date = (date.today() + timedelta(days=1)).strftime("%d.%m.%Y")
-    # url = f"https://hotels24.ua/en/{city.name}/?lang_code=en&target=search&event=city&typeLink=hotels24&dateArrival={checkin_date}&dateDeparture={checkout_date}"
-    # page = requests.get(url, proxies=proxies).content
+    checkin_date = date.today().strftime("%d.%m.%Y")
+    checkout_date = (date.today() + timedelta(days=1)).strftime("%d.%m.%Y")
+    url = f"https://hotels24.ua/en/{city.name}/?lang_code=en&target=search&event=city&typeLink=hotels24&dateArrival={checkin_date}&dateDeparture={checkout_date}"
+    page = requests.get(url, proxies=proxies).content
 
-    soup = BeautifulSoup(page_source, "html.parser")
+    soup = BeautifulSoup(page, "html.parser")
     hotels = soup.select(".hotel-container")[:3]
     hotel_list = []
     for hotel in hotels:
@@ -76,24 +69,32 @@ def parse_hotels(city):
 
 
 def parse_restaurant(city):
-
-    proxies = {
-        "http": "http://91.241.217.58:9090",
-    }
-
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Referer": "https://www.google.com/",
-        "Connection": "keep-alive",
-        "Cache-Control": "max-age=0",
-        "TE": "Trailers",
-    }
+    chrome_options = Options()
+    chrome_options.add_argument("--proxy-server=http://91.241.217.58:9090")
+    driver = webdriver.Chrome(options=chrome_options)
 
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.get(url, headers=headers, proxies=proxies).content
-    soup = BeautifulSoup(page, "html.parser")
+    driver.get(url)
+    page_source = driver.page_source
+
+    # proxies = {
+    #     "http": "http://91.241.217.58:9090",
+    # }
+    #
+    # headers = {
+    #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36",
+    #     "Accept-Language": "en-US,en;q=0.9",
+    #     "Accept-Encoding": "gzip, deflate, br",
+    #     "Referer": "https://www.google.com/",
+    #     "Connection": "keep-alive",
+    #     "Cache-Control": "max-age=0",
+    #     "TE": "Trailers",
+    # }
+    #
+    # url = f"https://restaurantguru.com/{city.name}"
+    # page = requests.get(url, headers=headers, proxies=proxies).content
+
+    soup = BeautifulSoup(page_source, "html.parser")
     restaurants = soup.select(".restaurant_row")[:15]
     restaurant_list = []
     for restaurant in restaurants:
