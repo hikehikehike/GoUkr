@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
 
 def generate_google_map_link(name):
@@ -69,32 +67,24 @@ def parse_hotels(city):
 
 
 def parse_restaurant(city):
-    chrome_options = Options()
-    chrome_options.add_argument("--proxy-server=http://91.241.217.58:9090")
-    driver = webdriver.Chrome(options=chrome_options)
+    proxies = {
+        "http": "http://91.241.217.58:9090",
+    }
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Referer": "https://www.google.com/",
+        "Connection": "keep-alive",
+        "Cache-Control": "max-age=0",
+        "TE": "Trailers",
+    }
 
     url = f"https://restaurantguru.com/{city.name}"
-    driver.get(url)
-    page_source = driver.page_source
+    page = requests.get(url, headers=headers, proxies=proxies).content
 
-    # proxies = {
-    #     "http": "http://91.241.217.58:9090",
-    # }
-    #
-    # headers = {
-    #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36",
-    #     "Accept-Language": "en-US,en;q=0.9",
-    #     "Accept-Encoding": "gzip, deflate, br",
-    #     "Referer": "https://www.google.com/",
-    #     "Connection": "keep-alive",
-    #     "Cache-Control": "max-age=0",
-    #     "TE": "Trailers",
-    # }
-    #
-    # url = f"https://restaurantguru.com/{city.name}"
-    # page = requests.get(url, headers=headers, proxies=proxies).content
-
-    soup = BeautifulSoup(page_source, "html.parser")
+    soup = BeautifulSoup(page, "html.parser")
     restaurants = soup.select(".restaurant_row")[:15]
     restaurant_list = []
     for restaurant in restaurants:
