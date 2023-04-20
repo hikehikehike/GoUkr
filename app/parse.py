@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
 def generate_google_map_link(name):
@@ -25,15 +27,24 @@ def generate_restaurant_tripadvisor_link(name, city):
 
 
 def parse_hotels(city):
-    proxies = {
-        "http": "http://91.241.217.58:9090",
-    }
+    chrome_options = Options()
+    chrome_options.add_argument("--proxy-server=http://91.241.217.58:9090")
+    driver = webdriver.Chrome(options=chrome_options)
 
-    checkin_date = date.today().strftime("%d.%m.%Y")
-    checkout_date = (date.today() + timedelta(days=1)).strftime("%d.%m.%Y")
-    url = f"https://hotels24.ua/en/{city.name}/?lang_code=en&target=search&event=city&typeLink=hotels24&dateArrival={checkin_date}&dateDeparture={checkout_date}"
-    page = requests.get(url, proxies=proxies).content
-    soup = BeautifulSoup(page, "html.parser")
+    url = f"https://restaurantguru.com/{city.name}"
+    driver.get(url)
+    page_source = driver.page_source
+
+    # proxies = {
+    #     "http": "http://91.241.217.58:9090",
+    # }
+    #
+    # checkin_date = date.today().strftime("%d.%m.%Y")
+    # checkout_date = (date.today() + timedelta(days=1)).strftime("%d.%m.%Y")
+    # url = f"https://hotels24.ua/en/{city.name}/?lang_code=en&target=search&event=city&typeLink=hotels24&dateArrival={checkin_date}&dateDeparture={checkout_date}"
+    # page = requests.get(url, proxies=proxies).content
+
+    soup = BeautifulSoup(page_source, "html.parser")
     hotels = soup.select(".hotel-container")[:3]
     hotel_list = []
     for hotel in hotels:
