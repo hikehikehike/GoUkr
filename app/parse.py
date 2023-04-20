@@ -83,22 +83,22 @@ def parse_restaurant(city):
         "TE": "Trailers",
     }
 
-    # cookies = {
-    #     "session_id": "1234567890abcdef",
-    #     "login": "myusername",
-    #     "password": "mypassword",
-    # }
-
-    params = {
-        "utm_source": "google",
-        "utm_medium": "organic",
-        "utm_campaign": "organic",
-        "utm_term": "lviv",
-        "utm_content": "",
+    cookies = {
+        "session_id": "1234567890abcdef",
+        "login": "myusername",
+        "password": "mypassword",
     }
 
+    # params = {
+    #     "utm_source": "google",
+    #     "utm_medium": "organic",
+    #     "utm_campaign": "organic",
+    #     "utm_term": "lviv",
+    #     "utm_content": "",
+    # }
+
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.post(url, headers=headers, proxies=proxies, params=params,
+    page = requests.post(url, headers=headers, proxies=proxies, cookies=cookies,
                          allow_redirects=True, verify=True).content
 
     page_text = str(page)  # конвертируем переменную page в строку, если она не является строкой
