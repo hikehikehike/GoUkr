@@ -83,8 +83,25 @@ def parse_restaurant(city):
         "TE": "Trailers",
     }
 
+    cookies = {
+        "session_id": "1234567890abcdef",
+        "login": "myusername",
+        "password": "mypassword",
+    }
+
+    params = {
+        "category": "restaurants",
+        "sort": "rating",
+    }
+
+    data = {
+        "username": "myusername",
+        "password": "mypassword",
+    }
+
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.get(url, headers=headers, proxies=proxies).content
+    page = requests.post(url, headers=headers, proxies=proxies, cookies=cookies, params=params, data=data,
+                         allow_redirects=True, verify=True).content
 
     page_text = str(page)  # конвертируем переменную page в строку, если она не является строкой
     page_obj = Pages(text=page_text)  # создаем экземпляр модели Pages
