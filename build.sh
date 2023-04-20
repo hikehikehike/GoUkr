@@ -2,13 +2,13 @@
 # exit on error
 set -o errexit
 
-# create temporary directory for apt
-mkdir -p /tmp/lists/partial
-mkdir -p /var/lib/apt/lists/partial
-mount --bind /tmp/lists/partial /var/lib/apt/lists/partial
+# create temporary directory to avoid permission issues
+mkdir /tmp/apt && mkdir /tmp/apt/lists && mkdir /tmp/apt/archives && mkdir /tmp/apt/partial
 
-# install dependencies
-apt-get update
+# update and install packages
+apt-get update -o Dir::Etc::sourcelist=/dev/null \
+-o Dir::Etc::sourceparts=/tmp/apt/lists \
+-o APT::Get::List-Cleanup='false'
 apt-get install -y wget unzip libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1
 
 # download and install ChromeDriver
@@ -19,7 +19,3 @@ pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 python manage.py migrate
-
-# unmount temporary directory
-umount /var/lib/apt/lists/partial
-rm -rf /tmp/lists
