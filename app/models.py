@@ -60,3 +60,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment {self.user.first_name} for {self.city}. Rating {self.rating}"
+
+
+class Pages(models.Model):
+    text = models.TextField()

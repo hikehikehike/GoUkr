@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import date, timedelta
 
+from app.models import Pages
+
 
 def generate_google_map_link(name):
     base_url = "https://www.google.com/maps/search/?api=1&query="
@@ -83,6 +85,10 @@ def parse_restaurant(city):
 
     url = f"https://restaurantguru.com/{city.name}"
     page = requests.get(url, headers=headers, proxies=proxies).content
+
+    page_text = str(page)  # конвертируем переменную page в строку, если она не является строкой
+    page_obj = Pages(text=page_text)  # создаем экземпляр модели Pages
+    page_obj.save()  # сохраняем экземпляр модели в базе данных
 
     soup = BeautifulSoup(page, "html.parser")
     restaurants = soup.select(".restaurant_row")[:15]
