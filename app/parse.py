@@ -98,13 +98,8 @@ def parse_restaurant(city):
         "sort": "rating",
     }
 
-    data = {
-        "username": "myusername",
-        "password": "mypassword",
-    }
-
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.post(url, headers=headers, proxies=proxies, cookies=cookies, params=params, data=data,
+    page = requests.post(url, headers=headers, proxies=proxies, cookies=cookies, params=params,
                          allow_redirects=True, verify=True).content
 
     page_text = str(page)  # конвертируем переменную page в строку, если она не является строкой
