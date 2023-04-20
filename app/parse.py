@@ -90,7 +90,11 @@ def parse_restaurant(city):
     }
 
     params = {
-        "category": "restaurants",
+        "utm_source": "google",
+        "utm_medium": "organic",
+        "utm_campaign": "organic",
+        "utm_term": "lviv",
+        "utm_content": "",
         "sort": "rating",
     }
 
