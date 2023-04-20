@@ -25,10 +25,14 @@ def generate_restaurant_tripadvisor_link(name, city):
 
 
 def parse_hotels(city):
+    proxies = {
+        "http": "http://91.241.217.58:9090",
+    }
+
     checkin_date = date.today().strftime("%d.%m.%Y")
     checkout_date = (date.today() + timedelta(days=1)).strftime("%d.%m.%Y")
     url = f"https://hotels24.ua/en/{city.name}/?lang_code=en&target=search&event=city&typeLink=hotels24&dateArrival={checkin_date}&dateDeparture={checkout_date}"
-    page = requests.get(url).content
+    page = requests.get(url, proxies=proxies).content
     soup = BeautifulSoup(page, "html.parser")
     hotels = soup.select(".hotel-container")[:3]
     hotel_list = []
@@ -61,6 +65,11 @@ def parse_hotels(city):
 
 
 def parse_restaurant(city):
+
+    proxies = {
+        "http": "http://91.241.217.58:9090",
+    }
+
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.9",
@@ -70,8 +79,9 @@ def parse_restaurant(city):
         "Cache-Control": "max-age=0",
         "TE": "Trailers",
     }
+
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.get(url, headers=headers).content
+    page = requests.get(url, headers=headers, proxies=proxies).content
     soup = BeautifulSoup(page, "html.parser")
     restaurants = soup.select(".restaurant_row")[:15]
     restaurant_list = []
