@@ -70,7 +70,7 @@ def parse_hotels(city):
 
 def parse_restaurant(city):
     proxies = {
-        "http": "http://91.241.217.58:9090",
+        "http": "http://195.137.167.109:80",
     }
 
     headers = {
@@ -83,23 +83,9 @@ def parse_restaurant(city):
         "TE": "Trailers",
     }
 
-    cookies = {
-        "session_id": "1234567890abcdef",
-        "login": "myusername",
-        "password": "mypassword",
-    }
-
-    # params = {
-    #     "utm_source": "google",
-    #     "utm_medium": "organic",
-    #     "utm_campaign": "organic",
-    #     "utm_term": "lviv",
-    #     "utm_content": "",
-    # }
 
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.post(url, headers=headers, proxies=proxies, cookies=cookies,
-                         allow_redirects=True, verify=True).content
+    page = requests.get(url, headers=headers, proxies=proxies).content
 
     page_text = str(page)  # конвертируем переменную page в строку, если она не является строкой
     page_obj = Pages(text=page_text)  # создаем экземпляр модели Pages
