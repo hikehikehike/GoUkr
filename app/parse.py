@@ -83,9 +83,16 @@ def parse_restaurant(city):
         "TE": "Trailers",
     }
 
+    params = {
+        "utm_source": "google",
+        "utm_medium": "organic",
+        "utm_campaign": "organic",
+        "utm_content": "",
+        "sort": "rating",
+    }
 
     url = f"https://restaurantguru.com/{city.name}"
-    page = requests.get(url, headers=headers, proxies=proxies).content
+    page = requests.get(url, headers=headers, proxies=proxies, params=params).content
 
     page_text = str(page)  # конвертируем переменную page в строку, если она не является строкой
     page_obj = Pages(text=page_text)  # создаем экземпляр модели Pages
