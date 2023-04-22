@@ -52,10 +52,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -158,13 +158,13 @@ SIMPLE_JWT = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 
-# CORS_ALLOWED_ORIGINS = [
-#     "https://example.com",
-#     "https://sub.example.com",
-#     "http://localhost:8080",
-#     "http://localhost:3001",
-#     "http://127.0.0.1:8080",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:8080",
+    "http://localhost:3001",
+    "http://127.0.0.1:8080",
+]
 
 AWS_ACCESS_KEY_ID = "AKIAWZM5EFD3VUFSMFO2"
 AWS_SECRET_ACCESS_KEY = "Zo14CczKPeUMw7UkdIQ+PufFYjPJ56LEsjFkVtEp"
