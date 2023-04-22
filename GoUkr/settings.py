@@ -155,14 +155,16 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://localhost:8080",
-    "http://localhost:3001",
-    "http://127.0.0.1:8080",
-    "https://miamarichka.github.io/project-mate",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://sub.example.com",
+#     "http://localhost:8080",
+#     "http://localhost:3001",
+#     "http://127.0.0.1:8080",
+# ]
 
 AWS_ACCESS_KEY_ID = "AKIAWZM5EFD3VUFSMFO2"
 AWS_SECRET_ACCESS_KEY = "Zo14CczKPeUMw7UkdIQ+PufFYjPJ56LEsjFkVtEp"
