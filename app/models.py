@@ -1,5 +1,6 @@
 import os
 import uuid
+from PIL import Image
 
 from django.db import models
 from django.utils.text import slugify
@@ -40,6 +41,16 @@ class CityImage(models.Model):
 
     def __str__(self):
         return f"Image: {self.city}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.width > 1400 or img.height > 800:
+            output_size = (1400, 800)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class Comment(models.Model):
